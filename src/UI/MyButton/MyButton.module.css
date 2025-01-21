@@ -1,0 +1,12 @@
+.myButton{
+    padding: 5px 15px;
+    border-radius: 4px;
+    background-color: var(--accent-color);
+    color: #fff;
+    font-family: var(--font-roboto);
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+}

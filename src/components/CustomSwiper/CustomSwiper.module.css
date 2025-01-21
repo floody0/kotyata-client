@@ -1,0 +1,78 @@
+/* Основной стиль Swiper */
+.swiperWrapper{
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.swiper {
+    max-width: 100%;
+}
+
+/* Кастомная пагинация */
+.customPagination {
+    position: absolute;
+    bottom: -10px !important;
+    display: flex;
+    gap: 0 5px;
+    justify-content: center;
+    z-index: 20;
+}
+
+.customPagination span{
+    background: var(--accent-color) !important;
+}
+
+/* Кастомная навигация */
+.swiperButtonPrev, .swiperButtonNext{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    cursor: pointer;
+    z-index: 20;
+    align-self: center;
+    border: 2px solid #A97DF3;
+    border-radius: 50%;
+    color: #A97DF3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.swiperButtonPrev{
+    left: -41px;
+}
+.swiperButtonNext{
+    right: -41px;
+}
+
+/* Адаптивные стили */
+@media (max-width: 1024px) {
+    .swiperWrapper {
+        flex-direction: column;
+    }
+
+    .swiper {
+        max-width: 90%;
+    }
+
+    .swiperButtonPrev,
+    .swiperButtonNext {
+        width: 24px;
+        height: 24px;
+        left: -35px;
+        right: -35px;
+    }
+
+    .swiperButtonPrev {
+        left: -35px;
+    }
+    .swiperButtonNext {
+        right: -35px;
+    }
+
+    .customPagination {
+        bottom: -15px !important;
+        gap: 3px;
+    }
+}
