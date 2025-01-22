@@ -73,6 +73,7 @@
 }
 
 .infoItem {
+    min-width: 400px;
     display: flex;
     gap: 0 14px;
 }
@@ -145,6 +146,17 @@
     width: 205px;
     height: 40px;
 }
+@media (max-width: 880px) {
+    .infoSection{
+        flex-direction: column;
+    }
+    .infoBlock  .blockTitle, .infoBlock  .blockDescription{
+        text-align: center;
+    }
+    .infoList{
+        gap: 20px 0;
+    }
+}
 
 @media (max-width: 768px) {
     .productsList{
@@ -162,16 +174,23 @@
     .itemDescription{
         font-size: 16px;
     }
-    .infoSection{
-        flex-direction: column;
-    }
-    .infoBlock  .blockTitle, .infoBlock  .blockDescription{
-        text-align: center;
-    }
-    .infoList{
-        gap: 20px 0;
-    }
     .historyBlock{
         flex-direction: column-reverse;
+    }
+}
+
+@media (max-width: 480px) {
+    .infoItem {
+        min-width: 200px;
+    }
+    .itemTitle {
+        font-size: 18px;
+    }
+    
+    .itemDescription {
+        font-size: 14px;
+    }
+    .historyBlock{
+        margin-top: 60px;
     }
 }

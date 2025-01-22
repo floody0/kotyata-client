@@ -1,0 +1,40 @@
+.productsPage{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.productsPageContainer{
+    display: flex;
+    flex-direction: column;
+}
+.poster{
+    width: 100%;
+    height: 400px;
+    background-image: url('/assets/products-poster.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.poster .productsPageContainer{
+    height: 100%;
+    justify-content: center;
+}
+.posterTitle{
+    max-width: 355px;
+    color: var(--accent-color);
+    font-family: var(--font-montesserat);
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 35px;
+    letter-spacing: -2%;
+}
+.posterDiscription{
+    max-width: 400px;
+    color: #333;
+    font-family: var(--font-poppins);
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+}

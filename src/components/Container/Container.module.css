@@ -1,5 +1,13 @@
 .container {
+    max-width: var(--container-width); 
     width: 100%;
-    max-width: var(--container-width);  
-    margin: 0 auto;  
+    margin: 0 auto;
+    padding: 0 60px;
+    box-sizing: content-box;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 30px;
+    }
 }
