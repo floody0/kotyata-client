@@ -1,5 +1,5 @@
 .productsItem {
-    width: calc(25% - 33px);
+    width: 250px !important;
     height: 355px;
     display: flex;
     flex-direction: column;
@@ -76,7 +76,7 @@
     width: calc(50% - 33px);
 }
 
-@media (max-width: 1024px) {
+/* @media (max-width: 1024px) {
     .productsItem {
         width: calc(33.33% - 33px);
     }
@@ -101,4 +101,4 @@
     .productsItem {
         width: calc(100% - 33px);
     }
-}
+} */

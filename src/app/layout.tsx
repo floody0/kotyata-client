@@ -42,7 +42,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={fontInter.className}>
                 <StoreProvider>
-                    <Header />
+                    <Header/>
                     <main className="main">
                         {children}
                     </main>

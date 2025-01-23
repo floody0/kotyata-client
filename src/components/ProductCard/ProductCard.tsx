@@ -24,7 +24,7 @@ const ProductCard = ({id, title, normalPrice, sellPrice, isInStock, note, catego
         >
             <span className={styles.onSale}>-30%</span>
             <Image
-                src={photos[0]}
+                src={photos?.[0] || "/assets/product-img.png"}
                 alt={title}
                 width={300}
                 height={300}

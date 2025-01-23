@@ -5,12 +5,13 @@ import Container from "../Container/Container";
 import Image from "next/image";
 import Link from "next/link";
 
-type Props = {};
+
+type Props = {
+};
 
 const Header = (props: Props) => {
     const [count, setCount] = useState<number>(16);
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
         console.log('click');
@@ -37,7 +38,7 @@ const Header = (props: Props) => {
                         isMenuOpen ? styles.navigationOpen : ""
                     }`}
                 >
-                    <Link className={styles.navigationLink} href="/">
+                    <Link className={`${styles.navigationLink} ${''}`} href="/"> 
                         Головна
                     </Link>
                     <Link className={styles.navigationLink} href="/products">
