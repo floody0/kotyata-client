@@ -60,7 +60,6 @@ const Products = (props: Props) => {
                             <MySearch className={styles.searchTool} setSearchQuerry={setSearchQuerry}/>
                             <div className={styles.sortTool}>
                                 Сортувати:
-                                <MySelect></MySelect>
                             </div>
                         </div>
                     </div>
