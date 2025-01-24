@@ -6,7 +6,6 @@
 }
 .productsPageContainer{
     display: flex;
-    flex-direction: column;
 }
 .poster{
     width: 100%;
@@ -18,6 +17,7 @@
 }
 .poster .productsPageContainer{
     height: 100%;
+    flex-direction: column;
     justify-content: center;
     gap: 5px 0;
 }
@@ -41,11 +41,30 @@
     line-height: 24px;
 }
 
+.productsSection{
+    width: 100%;
+    margin-top: 45px;
+    display: flex;
+    gap: 0 90px;
+}
+.mainSection{
+    width: 100%;
+}
+
+.sectionTools{
+    width: 100%;
+    border: 1px solid #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.sortTool{
+    display: flex;
+}
 .productsList{
     width: 100%;
     margin-top: 50px;
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
     gap: 30px 20px;
 }

@@ -1,0 +1,23 @@
+.myInput{
+    border: 1px solid #C2C5E1;
+    border-radius: 10px;
+    padding: 0 10px;
+    color: #000;
+    font-family: var(--font-inter);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    caret-color: #000;
+}
+.myInput::placeholder{
+    color: #C2C5E1;
+    font-family: var(--font-inter);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.myInput:focus{
+    outline: none;
+}

@@ -1,37 +1,43 @@
 'use client';
 import { Container, ProductCard } from "@/components";
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./Products.module.css";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchProducts, Product } from "@/store/slices/productsSlice";
+import { fetchProducts } from "@/store/slices/productsSlice";
+import { Product } from "@/models/product.interface";
+import { store } from "@/store/store";
+import MySearch from "@/UI/MySearch/MySearch";
+import { MySelect } from "@/UI";
 
 type Props = {};
 
-/* async function fetchProductsOnServer() {
-    await store.dispatch(fetchProducts());
-    return store.getState().products.products; // Возвращаем продукты
-}
- */
-const Products = () => {
+/* async function fetchProductsOnServer(params: {
+    categories: number[];
+    minPrice: number;
+    maxPrice: number;
+    sort: string;
+    searchQuery: string;
+    page: number;
+    limit: number;
+}): Promise<Product[]> {
+    await store.dispatch(fetchProducts(params) as any);
+    console.log(store.getState().products.products)
+    return store.getState().products.products;
+} */
 
-    const dispatch = useAppDispatch();
-    const { products, loading, error } = useAppSelector(
-        (state) => state.products
-    );
+const Products = (props: Props) => {
+    /* const params = {
+        categories: [1],
+        minPrice: 0,
+        maxPrice: 100,
+        sort: "asc",
+        searchQuery: "",
+        page: 1,
+        limit: 10,
+    };
 
-    useEffect(() => {
-        dispatch(
-            fetchProducts({
-                categories: [1],
-                minPrice: 0,
-                maxPrice: 10000,
-                sort: "asc",
-                searchQuery: "",
-                page: 1,
-                limit: 10,
-            })
-        );
-    }, [dispatch]);
+    const products = await fetchProductsOnServer(params); */
+
+    const [searchQuerry, setSearchQuerry] = useState<string>();
 
     return (
         <div className={styles.productsPage}>
@@ -47,10 +53,22 @@ const Products = () => {
                 </Container>
             </div>
             <Container className={styles.productsPageContainer}>
-                <div className={styles.productsList}>
-                    {products.map((products) => (
-                        <ProductCard key={products.id} {...products} />
-                    ))}
+                <div className={styles.productsSection}>
+                    <div className={styles.sidebar}>hhh</div>
+                    <div className={styles.mainSection}>
+                        <div className={styles.sectionTools}>
+                            <MySearch className={styles.searchTool} setSearchQuerry={setSearchQuerry}/>
+                            <div className={styles.sortTool}>
+                                Сортувати:
+                                <MySelect></MySelect>
+                            </div>
+                        </div>
+                    </div>
+                    {/* <div className={styles.productsList}>
+                        {products.map((products) => (
+                            <ProductCard key={products.id} {...products} />
+                        ))}
+                    </div> */}
                 </div>
             </Container>
         </div>

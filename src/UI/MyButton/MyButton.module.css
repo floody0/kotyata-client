@@ -1,7 +1,11 @@
-.myButton{
-    padding: 5px 15px;
+.myButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     border-radius: 4px;
     background-color: var(--accent-color);
+
     color: #fff;
     font-family: var(--font-roboto);
     font-size: 18px;

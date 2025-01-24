@@ -1,0 +1,34 @@
+import React from "react";
+import styles from "./MyInput.module.css";
+
+interface Props {
+    className?: string;
+    id?: string;
+    name?: string;
+    type: string;
+    placeholder?: string;
+    required?: boolean | false;
+    tabindex?: number;
+    value?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+}
+
+const MyInput = (props: Props) => {
+    return (
+        <input
+            className={`${styles.myInput} ${props.className || ""}`}
+            id={props.id}
+            name={props.name}
+            type={props.type}
+            placeholder={props.placeholder}
+            required={props.required}
+            tabIndex={props.tabindex}
+            value={props.value}
+            onChange={props.onChange}
+            onKeyDown={props.onKeyDown}
+        />
+    );
+};
+
+export default MyInput;

@@ -11,7 +11,8 @@ const MyButton = ({ children, ...props }: Props) => {
     return (
         <button
             onClick={props.onClick}
-            className={`${styles.myButton} ${props.className}`}
+            className={`${styles.myButton} ${props.className || ""}`}
+            
         >
             {children}
         </button>
