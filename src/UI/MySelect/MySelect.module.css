@@ -1,0 +1,105 @@
+/* Корневой контейнер */
+.mySelect {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+}
+
+.mySelect__control {
+    width: 200px !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    border: 1px solid #E7E6EF !important;
+    border-radius: 6px !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 5px 10px !important;
+    transition: all 0.3s ease !important;
+}
+
+.mySelect__control--menu-is-open .mySelect__indicator{
+    transform: rotateX(180deg) !important;
+}
+
+/* Ховер и фокус */
+/* .mySelect__control:hover {
+    
+} */
+
+.mySelect__control--is-focused {
+    box-shadow: 0 0 0 1px var(--accent-color) !important;
+}
+
+/* Контейнер для текста */
+.mySelect__value-container {
+    padding: 0 !important;
+}
+/* Текст выбранного элемента */
+.mySelect__single-value {
+    margin: 0 !important;
+    color: #737373 !important;
+    font-family: var(--font-inter)!important;
+    font-size: 14px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 18px !important;
+}
+
+/* Плейсхолдер */
+/* .mySelect__placeholder {
+    
+} */
+
+/* Индикаторы (иконка ▼ или крестик для удаления) */
+/* .mySelect__indicators {
+    
+} */
+
+.mySelect__indicator {
+    padding: 0 !important;
+    stroke: 0 !important;
+    color: var(--text-color) !important;
+    transition: all 0.3s ease !important;
+}
+
+.mySelect__indicator-separator{
+    display: none !important;
+}
+
+/* Список опций */
+.mySelect__menu {
+    margin-top: 4px !important;
+    border-radius: 6px !important;
+}
+.mySelect__control--menu-is-open{
+    transition: all 0.3s ease !important;
+}
+.mySelect__menu-list{
+    padding: 0 !important;
+    z-index: -1 !important;
+}
+
+.mySelect__option {
+    color: #737373 !important;
+    font-family: var(--font-inter)!important;
+    font-size: 14px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 18px !important;
+}
+.mySelect__option:nth-child(1){
+    border-radius: 6px 6px 0 0 !important;
+}
+.mySelect__option:nth-child(3){
+    border-radius: 0 0 6px 6px !important;
+}
+
+.mySelect__option--is-focused, .mySelect__option:hover{
+    background-color: var(--accent-color-light) !important;
+    color: var(--accent-color) !important;
+}
+.mySelect__option--is-selected, .mySelect__option--is-selected:hover{
+    background-color: var(--accent-color) !important;
+    color: #fff !important;
+}

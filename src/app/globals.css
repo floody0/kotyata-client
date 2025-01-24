@@ -36,3 +36,5 @@ a {
     color: inherit;
     text-decoration: none;
 }
+
+@import '../UI/MySelect/MySelect.module.css';

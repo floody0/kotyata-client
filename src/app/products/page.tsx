@@ -1,12 +1,9 @@
-'use client';
-import { Container, ProductCard } from "@/components";
+"use client";
+import { Container } from "@/components";
 import React, { useState } from "react";
 import styles from "./Products.module.css";
-import { fetchProducts } from "@/store/slices/productsSlice";
-import { Product } from "@/models/product.interface";
-import { store } from "@/store/store";
-import MySearch from "@/UI/MySearch/MySearch";
-import { MySelect } from "@/UI";
+import { MySelect, MySearch } from "@/UI";
+import { IProductsOption } from "@/models/productsOption.inteface";
 
 type Props = {};
 
@@ -37,7 +34,23 @@ const Products = (props: Props) => {
 
     const products = await fetchProductsOnServer(params); */
 
-    const [searchQuerry, setSearchQuerry] = useState<string>();
+    const options: IProductsOption[] = [
+        {
+            value: "1",
+            label: "Від дешевих до дорогих",
+        },
+        {
+            value: "2",
+            label: "Від дорогих до дешевих",
+        },
+        {
+            value: "3",
+            label: "Новинки",
+        },
+    ];
+
+    const [searchQuerry, setSearchQuerry] = useState<string>("");
+    const [sortQuerry, setSortQuerry] = useState<string>("3");
 
     return (
         <div className={styles.productsPage}>
@@ -57,9 +70,17 @@ const Products = (props: Props) => {
                     <div className={styles.sidebar}>hhh</div>
                     <div className={styles.mainSection}>
                         <div className={styles.sectionTools}>
-                            <MySearch className={styles.searchTool} setSearchQuerry={setSearchQuerry}/>
+                            <MySearch
+                                className={styles.searchTool}
+                                setSearchQuerry={setSearchQuerry}
+                            />
                             <div className={styles.sortTool}>
                                 Сортувати:
+                                <MySelect
+                                    options={options}
+                                    sortQuerry={sortQuerry}
+                                    setSortQuerry={setSortQuerry}
+                                />
                             </div>
                         </div>
                     </div>

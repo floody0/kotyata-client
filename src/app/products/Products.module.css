@@ -53,13 +53,21 @@
 
 .sectionTools{
     width: 100%;
-    border: 1px solid #000;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 .sortTool{
     display: flex;
+    align-items: center;
+    gap: 0 8px;
+    color: var(--text-color);
+    font-family: var(--font-inter);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
 }
 .productsList{
     width: 100%;
