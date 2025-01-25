@@ -45,6 +45,7 @@
     width: 100%;
     margin-top: 45px;
     display: flex;
+    flex-direction: column;
     gap: 0 90px;
 }
 .mainSection{
@@ -74,5 +75,6 @@
     margin-top: 50px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
     gap: 30px 20px;
 }

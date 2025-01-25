@@ -1,48 +1,41 @@
 import Link from "next/link";
-import React from "react";
+import React, { FC } from "react";
 import styles from "./ProductCard.module.css";
 import Image from "next/image";
+import { Product } from "@/models/product.interface";
 
 interface ProductProps {
-    id: number;
-    title: string;
-    description: string;
-    normalPrice: number;
-    sellPrice: number;
-    isInStock: boolean;
-    note: string;
-    categories: string[];
-    photos: string[];
+    product: Product
 };
 
-const ProductCard = ({id, title, normalPrice, sellPrice, isInStock, note, categories, photos}: ProductProps) => {
+const ProductCard:FC<ProductProps> = ({product}) => {
     return (
         <Link
-            href={`/products/${id}`}
+            href={`/products/${product.id}`}
             className={styles.productsItem}
-            key={id}
+            key={product.id}
         >
             <span className={styles.onSale}>-30%</span>
             <Image
-                src={photos?.[0] || "/assets/product-img.png"}
-                alt={title}
+                src={product.photos?.[0] || "/assets/product-img.png"}
+                alt={product.title}
                 width={300}
                 height={300}
                 className={styles.productImg}
             />
-            <h4 className={styles.productTitle}>{title}</h4>
+            <h4 className={styles.productTitle}>{product.title}</h4>
             <div className={styles.productPrice}>
-                {sellPrice > 0 ? (
+                {product.sellPrice > 0 ? (
                     <>
                         <span className={`${styles.price}`}>
-                            {sellPrice +'₴'}
+                            {product.sellPrice +'₴'}
                         </span>
                         <span className={`${styles.oldPrice}`}>
-                            {normalPrice +'₴'}
+                            {product.normalPrice +'₴'}
                         </span>
                     </>
                 ) : (
-                    <span className={styles.price}>{normalPrice +'₴'}</span>
+                    <span className={styles.price}>{product.normalPrice +'₴'}</span>
                 )}
             </div>
         </Link>

@@ -1,98 +1,39 @@
-"use client";
-import { Container } from "@/components";
-import React, { useState } from "react";
-import styles from "./Products.module.css";
-import { MySelect, MySearch } from "@/UI";
-import { IProductsOption } from "@/models/productsOption.inteface";
+import { Product } from '@/models/product.interface';
+import ClientProductsPage from './Products';
 
-type Props = {};
+interface ProductsPageProps {
+    searchParams: { [key: string]: string | undefined }; // Для доступа к параметрам из URL
+}
 
-/* async function fetchProductsOnServer(params: {
-    categories: number[];
-    minPrice: number;
-    maxPrice: number;
-    sort: string;
-    searchQuery: string;
-    page: number;
-    limit: number;
-}): Promise<Product[]> {
-    await store.dispatch(fetchProducts(params) as any);
-    console.log(store.getState().products.products)
-    return store.getState().products.products;
-} */
+// Функция для загрузки данных (SSR)
+async function fetchProducts(searchQuery: string,sort:string): Promise<Product[]> {
+    const queryParams = new URLSearchParams({
+        categories: JSON.stringify([]),
+        minPrice: '0',
+        maxPrice: '1000',
+        sort: sort,
+        searchQuery, // Учитываем searchQuery
+        page: '1',
+        limit: '10',
+    }).toString();
 
-const Products = (props: Props) => {
-    /* const params = {
-        categories: [1],
-        minPrice: 0,
-        maxPrice: 100,
-        sort: "asc",
-        searchQuery: "",
-        page: 1,
-        limit: 10,
-    };
+    const response = await fetch(`http://localhost:5000/products?${queryParams}`, {
+        cache: 'no-store', // Загрузка данных каждый раз
+    });
 
-    const products = await fetchProductsOnServer(params); */
+    if (!response.ok) {
+        throw new Error('Ошибка загрузки товаров');
+    }
 
-    const options: IProductsOption[] = [
-        {
-            value: "1",
-            label: "Від дешевих до дорогих",
-        },
-        {
-            value: "2",
-            label: "Від дорогих до дешевих",
-        },
-        {
-            value: "3",
-            label: "Новинки",
-        },
-    ];
+    const data = await response.json();
+    return data.items;
+}
 
-    const [searchQuerry, setSearchQuerry] = useState<string>("");
-    const [sortQuerry, setSortQuerry] = useState<string>("3");
+// Серверный компонент для страницы
+export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+    const searchQuery = searchParams.keyword || ''; // Получаем `keyword` из URL или устанавливаем пустую строку
+    const sort = searchParams.sort || 'NEWEST';
+    const initialProducts = await fetchProducts(searchQuery,sort);
 
-    return (
-        <div className={styles.productsPage}>
-            <div className={styles.poster}>
-                <Container className={styles.productsPageContainer}>
-                    <h2 className={styles.posterTitle}>
-                        Все для Ваших Мурчиків
-                    </h2>
-                    <p className={styles.posterDiscription}>
-                        Відкрийте чудовий каталог з кормами та аксесуарами для
-                        вашого малюка.
-                    </p>
-                </Container>
-            </div>
-            <Container className={styles.productsPageContainer}>
-                <div className={styles.productsSection}>
-                    <div className={styles.sidebar}>hhh</div>
-                    <div className={styles.mainSection}>
-                        <div className={styles.sectionTools}>
-                            <MySearch
-                                className={styles.searchTool}
-                                setSearchQuerry={setSearchQuerry}
-                            />
-                            <div className={styles.sortTool}>
-                                Сортувати:
-                                <MySelect
-                                    options={options}
-                                    sortQuerry={sortQuerry}
-                                    setSortQuerry={setSortQuerry}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    {/* <div className={styles.productsList}>
-                        {products.map((products) => (
-                            <ProductCard key={products.id} {...products} />
-                        ))}
-                    </div> */}
-                </div>
-            </Container>
-        </div>
-    );
-};
-
-export default Products;
+    return <ClientProductsPage initialProducts={initialProducts} severParams={{searchQuery,sort}} />;
+}

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./MySearch.module.css";
 import MyInput from "@/UI/MyInput/MyInput";
 import MyButton from "../MyButton/MyButton";
@@ -7,10 +7,12 @@ import MyButton from "../MyButton/MyButton";
 interface Props {
     className?: string;
     setSearchQuerry: (value: string) => void;
+    value: string
 }
 
 const MySearch = (props: Props) => {
-    const [value, setValue] = useState<string>("");
+    const [value, setValue] = useState<string>(props.value);
+
 
     const handleSearch = () => {
         props.setSearchQuerry(value || "");
