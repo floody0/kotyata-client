@@ -7,6 +7,7 @@ interface ProductsPageProps {
 
 // Функция для загрузки данных (SSR)
 async function fetchProducts(searchQuery: string,sort:string): Promise<Product[]> {
+
     const queryParams = new URLSearchParams({
         categories: JSON.stringify([]),
         minPrice: '0',

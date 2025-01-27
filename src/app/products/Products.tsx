@@ -9,114 +9,69 @@ import { AppDispatch, RootState } from '@/store/store';
 import { fetchProducts, setProducts } from '@/store/slices/productsSlice';
 import { MySearch, MySelect } from '@/UI';
 import { IProductsOption } from '@/models/productsOption.inteface';
-import { useRouter } from 'next/navigation';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { productsSortOptions } from '@/constants/sortParams';
+import { handleFilters } from '../../helpers/handleFilters';
 interface SeverParams {
-  categories?: string,
-  minPrice?: string,
-  maxPrice?: string,
-  sort?: string,
-  searchQuery?: string, // Учитываем searchQuery
-  page?: string,
-  limit?: string,
+    categories?: string,
+    minPrice?: string,
+    maxPrice?: string,
+    sort?: string,
+    searchQuery?: string,
+    page?: string,
+    limit?: string,
 }
 interface ClientProductsPageProps {
     initialProducts: Product[];
-    severParams: SeverParams; // Новый пропс для инициализации поискового запроса
+    severParams: SeverParams;
 }
 
 export default function ClientProductsPage({
     initialProducts,
     severParams,
 }: ClientProductsPageProps) {
-    const dispatch = useDispatch<AppDispatch>();
+    const dispatch = useAppDispatch();
+    const products = useAppSelector((state) => state.products.products);
+    const loading = useAppSelector((state) => state.products.loading);
+
     const [hydrated, setHydrated] = useState(false);
-    const products = useSelector((state: RootState) => state.products.products); 
-    const loading = useSelector((state: RootState) => state.products.loading);
+    const displayedProducts = hydrated ? products : initialProducts; 
 
-
-    const router = useRouter();
-/*     const { keyword } = router.query ;  */
-    console
-    const [searchQuery, setSearchQuery] = useState<string>(severParams.searchQuery || ''); 
+    const [searchQuery, setSearchQuery] = useState<string>(severParams.searchQuery || '');
     const [sortQuery, setSortQuery] = useState<string>(severParams.sort || '');
- 
 
     useEffect(() => {
         if (initialProducts.length > 0) {
             dispatch(setProducts(initialProducts));
         }
-        setHydrated(true); 
-        console.log(severParams.searchQuery)
+        setHydrated(true);
         setSearchQuery(severParams.searchQuery || '')
-    }, [ initialProducts]);
+    }, [initialProducts]);
 
-    const handleFilters = (filters: { [key: string]: string | number | undefined }) => {
-      // Текущий маршрут
-      const currentSearchParams = new URLSearchParams(window.location.search);
-    
-      // Удаляем пустые значения из объекта фильтров
-      const query = Object.fromEntries(
-        Object.entries(filters).filter(([_, value]) => value !== undefined && value !== '')
-      );
-    
-      // Сравниваем новый набор параметров с текущими
-      const hasChanges = Object.keys(query).some(
-        (key) => query[key] !== currentSearchParams.get(key)
-      );
-    
-      // Если параметры не изменились, ничего не делаем
-      if (!hasChanges) return;
-    
-      // Собираем новый маршрут
-      const queryString = new URLSearchParams(query as Record<string, string>).toString();
-      const newPath = queryString ? `/products?${queryString}` : '/products';
-    
-      router.push(newPath);
-    };
-    
-
-
-    const handleSearch = () =>{
-      if (hydrated ) {
-   
-        handleFilters({
-            keyword: searchQuery,
-            sort: sortQuery,
-        });
-        dispatch(
-            fetchProducts({
-                categories: [],
-                minPrice: 0,
-                maxPrice: 1000,
+    const handleSearch = () => {
+        if (hydrated) {
+            handleFilters({
+                keyword: searchQuery,
                 sort: sortQuery,
-                searchQuery: searchQuery,
-                page: 1,
-                limit: 10,
-            })
-        );
+            });
+            
+            dispatch(
+                fetchProducts({
+                    categories: [],
+                    minPrice: 0,
+                    maxPrice: 1000,
+                    sort: sortQuery,
+                    searchQuery: searchQuery,
+                    page: 1,
+                    limit: 10,
+                })
+            );
+        }
     }
-    }
+
     useEffect(() => {
-      handleSearch()
-    
+        handleSearch()
     }, [searchQuery, sortQuery]);
-
-    const options: IProductsOption[] = [
-        {
-            value: 'PRICE_ASC',
-            label: 'Від дешевих до дорогих',
-        },
-        {
-            value: 'PRICE_DESC',
-            label: 'Від дорогих до дешевих',
-        },
-        {
-            value: 'NEWEST',
-            label: 'Новинки',
-        },
-    ];
-
-    const displayedProducts = hydrated ? products : initialProducts; // Используем initialProducts до гидратации
 
     return (
         <div className={styles.productsPage}>
@@ -140,7 +95,7 @@ export default function ClientProductsPage({
                             <div className={styles.sortTool}>
                                 Сортувати:
                                 <MySelect
-                                    options={options}
+                                    options={productsSortOptions}
                                     sortQuery={sortQuery}
                                     setSortQuery={setSortQuery}
                                 />
