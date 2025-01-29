@@ -9,6 +9,7 @@ interface ProductProps {
 };
 
 const ProductCard:FC<ProductProps> = ({product}) => {
+
     return (
         <Link
             href={`/products/${product.id}`}

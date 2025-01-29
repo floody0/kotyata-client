@@ -12,6 +12,7 @@ interface Props {
     value?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+    onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 const MyInput = (props: Props) => {
@@ -27,6 +28,7 @@ const MyInput = (props: Props) => {
             value={props.value}
             onChange={props.onChange}
             onKeyDown={props.onKeyDown}
+            onBlur={props.onBlur}
         />
     );
 };

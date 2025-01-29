@@ -73,7 +73,7 @@ export default function Home() {
                     </h3>
                     <div className={styles.productsList}>
                         {products.map((product) => (
-                            <ProductCard key={product.id} {...product} />
+                            <ProductCard key={product.id} product={product} />
                         ))}
                     </div>
                 </div>

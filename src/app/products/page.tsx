@@ -1,40 +1,35 @@
-import { Product } from '@/models/product.interface';
-import ClientProductsPage from './Products';
+import { fetchProducts, FetchProductsParams } from "@/utils/fetchProducts";
+import { fetchCategories } from "@/utils/fetchCategories";
+import ClientProductsPage from "./Products";
 
 interface ProductsPageProps {
-    searchParams: { [key: string]: string | undefined }; // Для доступа к параметрам из URL
-}
-
-// Функция для загрузки данных (SSR)
-async function fetchProducts(searchQuery: string,sort:string): Promise<Product[]> {
-
-    const queryParams = new URLSearchParams({
-        categories: JSON.stringify([]),
-        minPrice: '0',
-        maxPrice: '1000',
-        sort: sort,
-        searchQuery, // Учитываем searchQuery
-        page: '1',
-        limit: '10',
-    }).toString();
-
-    const response = await fetch(`http://localhost:5000/products?${queryParams}`, {
-        cache: 'no-store', // Загрузка данных каждый раз
-    });
-
-    if (!response.ok) {
-        throw new Error('Ошибка загрузки товаров');
-    }
-
-    const data = await response.json();
-    return data.items;
+    searchParams: { [key: string]: string | undefined };
 }
 
 // Серверный компонент для страницы
-export default async function ProductsPage({ searchParams }: ProductsPageProps) {
-    const searchQuery = searchParams.keyword || ''; // Получаем `keyword` из URL или устанавливаем пустую строку
-    const sort = searchParams.sort || 'NEWEST';
-    const initialProducts = await fetchProducts(searchQuery,sort);
+export default async function ProductsPage({
+    searchParams,
+}: ProductsPageProps) {
+    const params: FetchProductsParams = {
+        searchQuery: searchParams?.keyword || "",
+        sort: searchParams?.sort || "NEWEST",
+        minPrice: searchParams?.minPrice || "0",
+        maxPrice: searchParams?.maxPrice || "1000",
+        page: searchParams?.page || "1",
+        limit: searchParams?.limit || "10",
+        categories: [1],
+    };
 
-    return <ClientProductsPage initialProducts={initialProducts} severParams={{searchQuery,sort}} />;
+    const [initialProductsResponse, categories] = await Promise.all([
+        fetchProducts(params),
+        fetchCategories(),
+    ]);
+
+    return (
+        <ClientProductsPage
+            initialProductsResponse={{ ...initialProductsResponse }}
+            categories={categories}
+            serverParams={{searchQuery: params.searchQuery, sort: params.sort, minPrice: params.minPrice, maxPrice: params.maxPrice, page: params.page, limit: params.limit}}
+        />
+    );
 }

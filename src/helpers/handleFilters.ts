@@ -11,6 +11,5 @@ export const handleFilters = (filters: { [key: string]: string  }) => {
 
     const queryString = new URLSearchParams(query as Record<string, string>).toString();
     const newPath = queryString ? `/products?${queryString}` : '/products';
-    console.log(newPath)
     window.history.pushState(null, '', newPath);
 };

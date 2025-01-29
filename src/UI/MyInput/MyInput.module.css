@@ -21,3 +21,13 @@
 .myInput:focus{
     outline: none;
 }
+
+.myInput[type="number"]::-webkit-inner-spin-button,
+.myInput[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.myInput[type="number"] {
+    -moz-appearance: textfield;
+}

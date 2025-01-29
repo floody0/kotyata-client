@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Montserrat, Poppins, Roboto } from "next/font/google";
+import { Inter, Josefin_Sans, Montserrat, Poppins, Roboto } from "next/font/google";
 import "./globals.css";
 import {Header, Footer} from "@/components";
 import StoreProvider from "@/store/StoreProvider";
@@ -26,6 +26,12 @@ const fontPoppins = Poppins({
     subsets: ["latin"],
     weight: ["400", "500", "600", "700"],
     variable: "--font-poppins",
+});
+
+const fontJosefin = Josefin_Sans({
+    subsets: ["latin"],
+    weight: ["400", "500", "600", "700"],
+    variable: "--font-josefin",
 });
 
 export const metadata: Metadata = {

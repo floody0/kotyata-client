@@ -4,6 +4,7 @@
     --font-inter: "Inter", sans-serif;
     --font-roboto: "Roboto", sans-serif;
     --font-poppins: "Poppins", sans-serif;
+    --font-josefin: "Josefin Sans", sans-serif;
     --accent-color: #A97DF3;
     --accent-color-light: #DED8FA;
     --main-font-color: #0B254B;
@@ -11,7 +12,7 @@
     --main-font-color-light: #5E6E89;
     --card-font-color: #252B42;
     --card-font-color-light: #9295AA;
-
+    --category-font-color: #151875;
 }
 html,
 body {
@@ -38,3 +39,4 @@ a {
 }
 
 @import '../UI/MySelect/MySelect.module.css';
+@import '../UI/MyRangebar/MyRangebar.module.css';

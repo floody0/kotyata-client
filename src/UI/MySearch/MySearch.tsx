@@ -7,6 +7,7 @@ import MyButton from "../MyButton/MyButton";
 interface Props {
     className?: string;
     setSearchQuerry: (value: string) => void;
+    onClick?: () => void;
     value: string
 }
 
