@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import { CheckIcon } from "@radix-ui/react-icons";
 import styles from "./MyCheckbox.module.css";
+import MyInput from "../MyInput/MyInput";
 
 interface MyCheckboxProps {
     checked: boolean;
@@ -14,16 +13,14 @@ const MyCheckbox: React.FC<MyCheckboxProps> = ({ checked, onChange, label, disab
     
     return (
         <div className={styles.checkboxWrapper}>
-            <CheckboxPrimitive.Root
-                className={`${styles.checkbox} ${checked ? styles.checked : ""}`}
+            <MyInput
+                className={styles.myCheckbox}
+                type="checkbox"
                 checked={checked}
-                onCheckedChange={onChange}
+                onChange={(e) => onChange(e.target.checked)}
                 disabled={disabled}
-            >
-                <CheckboxPrimitive.Indicator className={styles.checkboxIndicator}>
-                </CheckboxPrimitive.Indicator>
-            </CheckboxPrimitive.Root>
-            {label && <span className={styles.label}>{label}</span>}
+            />
+            <label className={styles.checkboxLabel} htmlFor="checkbox">{label}</label>
         </div>
     );
 };

@@ -77,7 +77,7 @@ export default function ClientProductsPage({
                     sort: sortQuery,
                     searchQuery: searchQuery,
                     page: 1,
-                    limit: 6,
+                    limit: 10,
                 })
             );
         }
@@ -98,6 +98,7 @@ export default function ClientProductsPage({
     // TODO:
     // Не правильно приходит ответ, сравнивает цену по normalPrice а не по sellPrice
     // Не коректно работает onPointerUp в MyRangebar
+    // Bug при загрузке страницы не отображаются продукты 
 
     // Добавил обрабочик на Enter в Input
     // PriceFilter Done!

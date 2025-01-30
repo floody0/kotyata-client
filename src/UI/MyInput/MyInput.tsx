@@ -10,6 +10,8 @@ interface Props {
     required?: boolean | false;
     tabindex?: number;
     value?: string;
+    checked?: boolean;
+    disabled?: boolean;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -26,6 +28,8 @@ const MyInput = (props: Props) => {
             required={props.required}
             tabIndex={props.tabindex}
             value={props.value}
+            checked={props.checked}
+            disabled={props.disabled}
             onChange={props.onChange}
             onKeyDown={props.onKeyDown}
             onBlur={props.onBlur}

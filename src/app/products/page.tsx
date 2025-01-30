@@ -17,7 +17,7 @@ export default async function ProductsPage({
         maxPrice: searchParams?.maxPrice || "1000",
         page: searchParams?.page || "1",
         limit: searchParams?.limit || "10",
-        categories: [1],
+        categories: [],
     };
 
     const [initialProductsResponse, categories] = await Promise.all([

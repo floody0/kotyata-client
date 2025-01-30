@@ -1,7 +1,8 @@
 import React, { FC, useState } from "react";
 import styles from "./CategoryFilter.module.css";
-import { MyCheckbox } from "@/UI";
+import { MyButton, MyCheckbox } from "@/UI";
 import { Category } from "@/models";
+import Image from "next/image";
 
 type CategoryFilterProps = {
     categories: Category[];
@@ -10,75 +11,115 @@ type CategoryFilterProps = {
 
 const CategoryFilter: FC<CategoryFilterProps> = ({ categories, onChange }) => {
     const [expanded, setExpanded] = useState<number[]>([]);
-    const [selected, setSelected] = useState<number[]>([]);
+    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
+    const handleCheckboxChange = (
+        id: number,
+        checked: boolean,
+        children: Category[]
+    ) => {
+        let updatedSelectedIds = new Set(selectedIds);
+
+        if (checked) {
+            updatedSelectedIds.add(id);
+            children?.forEach((child) =>
+                getAllChildIds(child).forEach((childId) =>
+                    updatedSelectedIds.add(childId)
+                )
+            );
+        } else {
+            updatedSelectedIds.delete(id);
+            children?.forEach((child) =>
+                getAllChildIds(child).forEach((childId) =>
+                    updatedSelectedIds.delete(childId)
+                )
+            );
+        }
+
+        setParentSelection(id, categories, updatedSelectedIds);
+        const result = Array.from(updatedSelectedIds);
+        setSelectedIds(result);
+        onChange(result);
+    };
+
+    const setParentSelection = (
+        id: number,
+        categories: Category[],
+        selectedIds: Set<number>
+    ) => {
+        const parent = findParent(id, categories);
+        if (parent) {
+            const allChildrenSelected = parent.children.every((child) =>
+                selectedIds.has(child.id)
+            );
+            allChildrenSelected
+                ? selectedIds.add(parent.id)
+                : selectedIds.delete(parent.id);
+            setParentSelection(parent.id, categories, selectedIds);
+        }
+    };
+
+    const findParent = (
+        id: number,
+        categories: Category[]
+    ): Category | null => {
+        for (const category of categories) {
+            if (category.children.some((child) => child.id === id))
+                return category;
+            const parent = findParent(id, category.children);
+            if (parent) return parent;
+        }
+        return null;
+    };
+
+    const getAllChildIds = (category: Category): number[] => {
+        return [category.id, ...category.children.flatMap(getAllChildIds)];
+    };
 
     const toggleExpand = (id: number) => {
         setExpanded((prev) =>
-            prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+            prev.includes(id)
+                ? prev.filter((item) => item !== id)
+                : [...prev, id]
         );
-    };
-
-    const toggleSelect = (id: number, isChecked: boolean, children: Category[]) => {
-        let newSelected = [...selected];
-
-        if (isChecked) {
-            if (!newSelected.includes(id)) newSelected.push(id);
-        } else {
-            newSelected = newSelected.filter((item) => item !== id);
-        }
-
-        const toggleChildren = (categories: Category[], checked: boolean) => {
-            categories.forEach((child) => {
-                if (checked) {
-                    if (!newSelected.includes(child.id)) newSelected.push(child.id);
-                } else {
-                    newSelected = newSelected.filter((item) => item !== child.id);
-                }
-                if (child.children.length > 0) {
-                    toggleChildren(child.children, checked);
-                }
-            });
-        };
-
-        toggleChildren(children, isChecked);
-
-        setSelected(newSelected);
-        onChange(newSelected);
-    };
-
-    const isFullySelected = (category: Category): boolean => {
-        if (category.children.length === 0) {
-            return selected.includes(category.id);
-        }
-        return category.children.every((child) => isFullySelected(child));
     };
 
     const renderCategories = (categories: Category[]) => {
         return categories.map((category) => {
             const isExpanded = expanded.includes(category.id);
-            const isChecked = isFullySelected(category);
 
             return (
                 <div key={category.id} className={styles.categoryItem}>
                     <div className={styles.categoryHeader}>
                         <MyCheckbox
-                            checked={isChecked}
+                            checked={selectedIds.includes(category.id)}
                             onChange={(checked) =>
-                                toggleSelect(category.id, checked, category.children)
+                                handleCheckboxChange(
+                                    category.id,
+                                    checked,
+                                    category.children
+                                )
                             }
                             label={category.title}
                         />
-                        {category.children.length > 0 && (
-                            <button
-                                className={styles.expandButton}
+                        {category.children?.length > 0 && (
+                            <MyButton
+                                className={`${styles.expandButton} ${
+                                    isExpanded ? styles.active : ""
+                                }`}
                                 onClick={() => toggleExpand(category.id)}
                             >
-                                {isExpanded ? "▲" : "▼"}
-                            </button>
+                                <Image
+                                    src="/assets/vector-select-arrow.png"
+                                    alt="Arrow"
+                                    width={12}
+                                    height={8}
+                                />
+                            </MyButton>
                         )}
                     </div>
-                    {isExpanded && category.children.length > 0 && (
-                        <div className={styles.children}>
+                    {isExpanded && category.children?.length > 0 && (
+                        <div className={styles.subcategories}>
                             {renderCategories(category.children)}
                         </div>
                     )}
@@ -87,7 +128,14 @@ const CategoryFilter: FC<CategoryFilterProps> = ({ categories, onChange }) => {
         });
     };
 
-    return <div className={styles.nestedCheckboxList}>{renderCategories(categories)}</div>;
+    return (
+        <div className={styles.sidebarSection}>
+            <h3 className={styles.sidebarTitle}>Категорії</h3>
+            <div className={styles.categories}>
+                {renderCategories(categories)}
+            </div>
+        </div>
+    );
 };
 
 export default CategoryFilter;
