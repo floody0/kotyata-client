@@ -1,6 +1,7 @@
 import Link from "next/link";
 import styles from "./page.module.css";
-import { Container, CustomSwiper, ProductCard } from "@/components";
+import { Container, CustomSwiper} from "@/components";
+import ProductCard from "@/components/ProductCard/ProductCard";
 import Image from "next/image";
 import MyButton from "@/UI/MyButton/MyButton";
 
@@ -72,9 +73,9 @@ export default function Home() {
                         полицях звичайних зоомагазинів
                     </h3>
                     <div className={styles.productsList}>
-                        {products.map((product) => (
+                        {/* {products.map((product) => (
                             <ProductCard key={product.id} product={product} />
-                        ))}
+                        ))} */}
                     </div>
                 </div>
                 <div className={styles.infoBlock}>

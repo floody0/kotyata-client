@@ -5,13 +5,14 @@ import { Container } from "@/components";
 import { Product, Category } from "@/models";
 import styles from "./Products.module.css";
 import { fetchProducts, setProducts } from "@/store/slices/productsSlice";
-import {MySearch, MySelect} from "@/UI";
+import { MySearch, MySelect } from "@/UI";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { productsSortOptions } from "@/constants/sortParams";
-import { handleFilters } from "../../helpers/handleFilters";
+import { handleFilters } from "../../../helpers/handleFilters";
 import ProductList from "@/components/ProductList/ProductList";
 import PriceFilter from "@/components/PriceFilter/PriceFilter";
 import CategoryFilter from "@/components/CategoryFilter/CategoryFilter";
+import PagePagination from "@/components/PagePagination/PagePagination";
 
 interface ServerParams {
     categories?: string;
@@ -61,6 +62,8 @@ export default function ClientProductsPage({
     const [maxPrice, setMaxPrice] = useState<number>(
         initialProductsResponse.maxPrice || Number(serverParams.maxPrice)
     );
+    const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+    const [page, setPage] = useState<number>(1);
 
     const handleSearch = () => {
         if (hydrated) {
@@ -71,13 +74,13 @@ export default function ClientProductsPage({
 
             dispatch(
                 fetchProducts({
-                    categories: [],
+                    categories: selectedCategories,
                     minPrice: minPrice,
                     maxPrice: maxPrice,
                     sort: sortQuery,
                     searchQuery: searchQuery,
-                    page: 1,
-                    limit: 10,
+                    page: page,
+                    limit: 6,
                 })
             );
         }
@@ -93,27 +96,15 @@ export default function ClientProductsPage({
 
     useEffect(() => {
         handleSearch();
-    }, [searchQuery, sortQuery]);
+        console.log(displayedProducts);
+    }, [searchQuery, sortQuery, selectedCategories, page]);
 
     // TODO:
     // Не правильно приходит ответ, сравнивает цену по normalPrice а не по sellPrice
     // Не коректно работает onPointerUp в MyRangebar
-    // Bug при загрузке страницы не отображаются продукты 
+    // Переделать слайс products для totalPages в  пагинации и  maxPrice и minPrice
 
-    // Добавил обрабочик на Enter в Input
-    // PriceFilter Done!
-
-    console.log(categories)
-
-    const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-
-    const handleCategoryChange = (selectedIds: number[]) => {
-        setSelectedCategories(selectedIds);
-        console.log("Selected categories:", selectedIds);
-    };
-
-    console.log(selectedCategories)
-
+    
     return (
         <div className={styles.productsPage}>
             <div className={styles.poster}>
@@ -130,7 +121,10 @@ export default function ClientProductsPage({
             <Container className={styles.productsPageContainer}>
                 <div className={styles.productsSection}>
                     <div className={styles.sidebar}>
-                        <CategoryFilter categories={categories} onChange={handleCategoryChange}/>
+                        <CategoryFilter
+                            categories={categories}
+                            onChange={setSelectedCategories}
+                        />
                         <PriceFilter
                             minPrice={minPrice}
                             maxPrice={maxPrice}
@@ -161,6 +155,11 @@ export default function ClientProductsPage({
                         <ProductList
                             loading={loading}
                             products={displayedProducts}
+                        />
+                        <PagePagination
+                            totalPages={initialProductsResponse.totalPages}
+                            currentPage={page}
+                            onPageChange={setPage}
                         />
                     </div>
                 </div>

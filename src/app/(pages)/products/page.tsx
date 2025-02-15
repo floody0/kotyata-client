@@ -16,7 +16,7 @@ export default async function ProductsPage({
         minPrice: searchParams?.minPrice || "0",
         maxPrice: searchParams?.maxPrice || "1000",
         page: searchParams?.page || "1",
-        limit: searchParams?.limit || "10",
+        limit: searchParams?.limit || "6",
         categories: [],
     };
 

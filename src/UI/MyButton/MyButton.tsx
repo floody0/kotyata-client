@@ -5,6 +5,7 @@ interface Props {
     className?: string;
     children: React.ReactNode;
     onClick?: () => void;
+    disabled?: boolean;
 }
 
 const MyButton = ({ children, ...props }: Props) => {
@@ -12,7 +13,7 @@ const MyButton = ({ children, ...props }: Props) => {
         <button
             onClick={props.onClick}
             className={`${styles.myButton} ${props.className || ""}`}
-            
+            disabled={props.disabled}
         >
             {children}
         </button>
