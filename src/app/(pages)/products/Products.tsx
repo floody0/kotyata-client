@@ -5,7 +5,7 @@ import { Container } from "@/components";
 import { Product, Category } from "@/models";
 import styles from "./Products.module.css";
 import { fetchProducts, setProducts } from "@/store/slices/productsSlice";
-import { MySearch, MySelect } from "@/UI";
+import { MyButton, MySearch, MySelect } from "@/UI";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { productsSortOptions } from "@/constants/sortParams";
 import { handleFilters } from "../../../helpers/handleFilters";
@@ -55,6 +55,7 @@ export default function ClientProductsPage({
     const [searchQuery, setSearchQuery] = useState<string>(
         serverParams.searchQuery || ""
     );
+    const [viewMode, setViewMode] = useState<string>("block");
     const [sortQuery, setSortQuery] = useState<string>(serverParams.sort || "");
     const [minPrice, setMinPrice] = useState<number>(
         initialProductsResponse.minPrice || Number(serverParams.minPrice)
@@ -64,12 +65,15 @@ export default function ClientProductsPage({
     );
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
     const [page, setPage] = useState<number>(1);
-
+    const [limit, setLimit] = useState<number>(viewMode === "block" ? 6 : 3);
     const handleSearch = () => {
         if (hydrated) {
             handleFilters({
                 keyword: searchQuery,
                 sort: sortQuery,
+                minPrice: String(minPrice),
+                maxPrice: String(maxPrice),
+                page: String(page),
             });
 
             dispatch(
@@ -80,7 +84,7 @@ export default function ClientProductsPage({
                     sort: sortQuery,
                     searchQuery: searchQuery,
                     page: page,
-                    limit: 6,
+                    limit: limit,
                 })
             );
         }
@@ -97,14 +101,14 @@ export default function ClientProductsPage({
     useEffect(() => {
         handleSearch();
         console.log(displayedProducts);
-    }, [searchQuery, sortQuery, selectedCategories, page]);
+        console.log(viewMode);
+    }, [searchQuery, sortQuery, selectedCategories, page, viewMode]);
 
     // TODO:
     // Не правильно приходит ответ, сравнивает цену по normalPrice а не по sellPrice
     // Не коректно работает onPointerUp в MyRangebar
-    // Переделать слайс products для totalPages в  пагинации и  maxPrice и minPrice
+    // Переделать слайс products для totalPages в пагинации и maxPrice и minPrice
 
-    
     return (
         <div className={styles.productsPage}>
             <div className={styles.poster}>
@@ -143,7 +147,60 @@ export default function ClientProductsPage({
                                 value={searchQuery}
                                 onClick={handleSearch}
                             />
-                            <div className={styles.sortTool}>
+                            <div
+                                className={`${styles.tool} ${styles.viewTool}`}
+                            >
+                                Вигляд:
+                                <MyButton
+                                    className={`${styles.viewButton} ${
+                                        viewMode === "block"
+                                            ? styles.active
+                                            : ""
+                                    }`}
+                                    onClick={() => {
+                                        setViewMode("block");
+                                        setLimit(6);
+                                    }}
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        width="18"
+                                        height="18"
+                                        fill="currentColor"
+                                    >
+                                        <path
+                                            fill="none"
+                                            d="M0 0h24v24H0z"
+                                        ></path>
+                                        <path d="M22 12.999V20C22 20.5523 21.5523 21 21 21H13V12.999H22ZM11 12.999V21H3C2.44772 21 2 20.5523 2 20V12.999H11ZM11 3V10.999H2V4C2 3.44772 2.44772 3 3 3H11ZM21 3C21.5523 3 22 3.44772 22 4V10.999H13V3H21Z"></path>
+                                    </svg>
+                                </MyButton>
+                                <MyButton
+                                    className={`${styles.viewButton} ${
+                                        viewMode === "list" ? styles.active : ""
+                                    }`}
+                                    onClick={() => {
+                                        setViewMode("list");
+                                        setLimit(3);
+                                    }}
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        width="18"
+                                        height="18"
+                                        fill="currentColor"
+                                    >
+                                        <path
+                                            fill="none"
+                                            d="M0 0h24v24H0z"
+                                        ></path>
+                                        <path d="M8 4H21V6H8V4ZM3 3.5H6V6.5H3V3.5ZM3 10.5H6V13.5H3V10.5ZM3 17.5H6V20.5H3V17.5ZM8 11H21V13H8V11ZM8 18H21V20H8V18Z"></path>
+                                    </svg>
+                                </MyButton>
+                            </div>
+                            <div className={`${styles.tool}`}>
                                 Сортувати:
                                 <MySelect
                                     options={productsSortOptions}
@@ -155,6 +212,7 @@ export default function ClientProductsPage({
                         <ProductList
                             loading={loading}
                             products={displayedProducts}
+                            view={viewMode}
                         />
                         <PagePagination
                             totalPages={initialProductsResponse.totalPages}

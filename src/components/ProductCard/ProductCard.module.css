@@ -1,13 +1,26 @@
 .productsItem {
     width: 250px !important;
-    height: 355px;
+    /* height: 355px; */
     display: flex;
     flex-direction: column;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
     position: relative;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
     gap: 10px 0;
+}
+.productsItem.listView{
+    width: 100% !important;
+    flex-direction: row;
+    padding: 15px;
+    gap: 20px;
+}
+.productInfo{
+    display: flex;
+    flex-direction: column;
+    gap: 10px 0;
+    padding: 0 10px;
+    flex-grow: 1;
 }
 
 .onSale{
@@ -33,9 +46,13 @@
     object-position: center;
     border-radius: 10px 0;
 }
+.productImg.listImg{
+    width: 160px;
+    height: 160px;
+    border-radius: 10px;
+}
 .productTitle{
     width: 200px;
-    margin: 0 0 0 10px;
     color: #252B42;
     font-family: var(--font-montserrat);
     font-size: 16px;
@@ -49,7 +66,6 @@
     display: flex;
     align-items: flex-end;
     gap: 0 5px;
-    margin: 0 0 0 10px;
 }
 
 .price{
@@ -62,6 +78,7 @@
 }
 
 .oldPrice{
+    margin-left: 5px;
     color: #B0B0B0;
     font-family: var(--font-poppins);
     font-size: 16px;
@@ -71,34 +88,39 @@
     text-decoration: line-through;
 }
 
+.productDescription{
+    color: var(--card-font-color-light);
+    font-family: var(--fontLato), sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+.productButtons{
+    margin-top: auto;
+    justify-self: flex-end;
+    display: flex;
+    gap: 0 20px;
+}
+.productButton{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    box-shadow: 0 0 25px 0px rgba(0, 0, 0, 0.05);
+    color: var(--accent-color);
+    transition: all 0.3s ease;
+}
+.productButton:hover{
+    background-color: var(--accent-color);
+    color: #fff;
+}
+
 
 .productsItem:nth-child(n + 5) {
     width: calc(50% - 33px);
 }
 
-/* @media (max-width: 1024px) {
-    .productsItem {
-        width: calc(33.33% - 33px);
-    }
-
-    .productsItem:nth-child(n + 5) {
-        width: calc(50% - 33px);
-    }
-}
-
-@media (max-width: 768px) {
-    .productsItem {
-        width: calc(50% - 33px);
-    }
-
-    .productsItem:nth-child(n + 5) {
-        width: calc(100% - 33px);
-    }
-    
-}
-
-@media (max-width: 480px) {
-    .productsItem {
-        width: calc(100% - 33px);
-    }
-} */

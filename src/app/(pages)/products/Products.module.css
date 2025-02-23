@@ -60,8 +60,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
 }
-.sortTool{
+.tool{
     display: flex;
     align-items: center;
     gap: 0 8px;
@@ -73,6 +74,19 @@
     line-height: normal;
 
 }
+.viewTool{
+    margin-left: 60px;
+}
+.viewButton{
+    color: var(--text-color) !important;
+    opacity: 0.6;
+    background-color: transparent !important;
+}
+.viewButton.active{
+    color: var(--accent-color) !important;
+    opacity: 1;
+}
+
 /**/
 .sidebar{
     width: 180px;
