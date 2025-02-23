@@ -101,7 +101,6 @@ export default function ClientProductsPage({
     useEffect(() => {
         handleSearch();
         console.log(displayedProducts);
-        console.log(viewMode);
     }, [searchQuery, sortQuery, selectedCategories, page, viewMode]);
 
     // TODO:
