@@ -3,20 +3,21 @@ import { fetchCategories } from "@/utils/fetchCategories";
 import ClientProductsPage from "./Products";
 
 interface ProductsPageProps {
-    searchParams: { [key: string]: string | undefined };
+    searchParams: Promise<{ [key: string]: string | undefined }>;
 }
 
 // Серверный компонент для страницы
 export default async function ProductsPage({
-    searchParams,
+    searchParams: searchParamsPromise,
 }: ProductsPageProps) {
+    const searchParams = await searchParamsPromise;
     const params: FetchProductsParams = {
         searchQuery: searchParams?.keyword || "",
         sort: searchParams?.sort || "NEWEST",
         minPrice: searchParams?.minPrice || "0",
         maxPrice: searchParams?.maxPrice || "0",
         page: searchParams?.page || "1",
-        limit: searchParams?.limit || "6",
+        limit: searchParams?.limit ?? "6",
         categories: [],
     };
 

@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Container } from "@/components";
 import { Product, Category } from "@/models";
 import styles from "./Products.module.css";
 import { fetchProducts, setProducts } from "@/store/slices/productsSlice";
 import { MyButton, MySearch, MySelect } from "@/UI";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector, useAppStore } from "@/store/hooks";
 import { productsSortOptions } from "@/constants/sortParams";
 import { handleFilters } from "../../../helpers/handleFilters";
 import ProductList from "@/components/ProductList/ProductList";
@@ -38,19 +38,45 @@ interface ClientProductsPageProps {
     serverParams: ServerParams;
 }
 
+function useMounted() {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+
+        return () => {
+            setMounted(false);
+        };
+    }, []);
+
+    return mounted;
+}
+
 export default function ClientProductsPage({
     initialProductsResponse,
     categories,
     serverParams,
 }: ClientProductsPageProps) {
+
+    //Some kind of magic
+    const store = useAppStore()
+    const initialized = useRef(false)
+    if (!initialized.current) {
+      store.dispatch(setProducts(initialProductsResponse.items));
+      initialized.current = true;
+    }
+
     const dispatch = useAppDispatch();
     const products = useAppSelector((state) => state.products.products);
     const loading = useAppSelector((state) => state.products.loading);
 
-    const [hydrated, setHydrated] = useState(false);
-    const displayedProducts = hydrated
-        ? products
-        : initialProductsResponse.items;
+    // const hydrated = useHydrated();
+
+    console.log("initialProductsResponse", initialProductsResponse)
+    
+    // const displayedProducts = hydrated
+    //     ? products
+    //     : initialProductsResponse.items;
 
     const [searchQuery, setSearchQuery] = useState<string>(
         serverParams.searchQuery || ""
@@ -65,42 +91,50 @@ export default function ClientProductsPage({
     );
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
     const [page, setPage] = useState<number>(1);
-    const [limit, setLimit] = useState<number>(viewMode === "block" ? 6 : 3);
-    const handleSearch = () => {
-        if (hydrated) {
-            handleFilters({
-                keyword: searchQuery,
-                sort: sortQuery,
-                minPrice: String(minPrice),
-                maxPrice: String(maxPrice),
-                page: String(page),
-            });
 
-            dispatch(
-                fetchProducts({
-                    categories: selectedCategories,
-                    minPrice: minPrice,
-                    maxPrice: maxPrice,
-                    sort: sortQuery,
-                    searchQuery: searchQuery,
-                    page: page,
-                    limit: limit,
-                })
-            );
-        }
+    const [limit, setLimit] = useState<number>(viewMode === "block" ? 6 : 3);
+    console.log(limit);
+    const handleSearch = () => {
+        handleFilters({
+            keyword: searchQuery,
+            sort: sortQuery,
+            minPrice: String(minPrice),
+            maxPrice: String(maxPrice),
+            page: String(page),
+        });
+
+        dispatch(
+            fetchProducts({
+                categories: selectedCategories,
+                minPrice: minPrice,
+                maxPrice: maxPrice,
+                sort: sortQuery,
+                searchQuery: searchQuery,
+                page: page,
+                limit: limit,
+            })
+        );
     };
 
-    useEffect(() => {
-        if (initialProductsResponse.items.length > 0) {
-            dispatch(setProducts(initialProductsResponse.items));
-        }
-        setHydrated(true);
-        setSearchQuery(serverParams.searchQuery || "");
-    }, [initialProductsResponse.items]);
+    // useEffect(() => {
+    //     dispatch(setProducts(initialProductsResponse.items));
+    //     setSearchQuery(serverParams.searchQuery || "");
+    // }, []);
+
+    // useEffect(() => {
+    //     if (initialProductsResponse.items.length > 0) {
+    //         dispatch(setProducts(initialProductsResponse.items));
+    //     }
+    //     setHydrated(true);
+    //     setSearchQuery(serverParams.searchQuery || "");
+    // }, [initialProductsResponse.items]);
 
     useEffect(() => {
-        handleSearch();
-        console.log(displayedProducts);
+        //if (hydrated) {
+            handleSearch();
+        //}
+       
+        //console.log(displayedProducts);
     }, [searchQuery, sortQuery, selectedCategories, page, viewMode]);
 
     // TODO:
@@ -210,7 +244,7 @@ export default function ClientProductsPage({
                         </div>
                         <ProductList
                             loading={loading}
-                            products={displayedProducts}
+                            products={products}
                             view={viewMode}
                         />
                         <PagePagination

@@ -11,6 +11,9 @@ interface Props {
 const MyButton = ({ children, ...props }: Props) => {
     return (
         <button
+            type="button"
+            title=""
+            aria-description=""
             onClick={props.onClick}
             className={`${styles.myButton} ${props.className || ""}`}
             disabled={props.disabled}
